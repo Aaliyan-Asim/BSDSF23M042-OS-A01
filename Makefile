@@ -1,42 +1,11 @@
-# Compiler and Flags
-CC = gcc
-CFLAGS = -Wall -Iinclude
+.PHONY: install
+install:
+	# Create directories if they don't exist
+	sudo mkdir -p /usr/local/bin
+	sudo mkdir -p /usr/local/share/man/man3
 
-# Directories
-SRCDIR = src
-OBJDIR = obj
-BINDIR = bin
-LIBDIR = lib
+	# Copy executable (use project bin directory)
+	sudo cp $(BIN_DIR)/client_dynamic /usr/local/bin/client
 
-# Targets
-TARGET = $(BINDIR)/client_static
-LIBNAME = libmyutils.a
-LIB = $(LIBDIR)/$(LIBNAME)
-
-# Object files
-OBJECTS = $(OBJDIR)/mystrfunctions.o $(OBJDIR)/myfilefunctions.o
-MAINOBJ = $(OBJDIR)/main.o
-
-# Default build
-all: $(LIB) $(TARGET)
-
-# Build static library from object files
-$(LIB): $(OBJECTS)
-	ar rcs $@ $^
-
-# Build the final program and link with static library
-$(TARGET): $(MAINOBJ) $(LIB)
-	$(CC) $(CFLAGS) -o $@ $(MAINOBJ) -L$(LIBDIR) -lmyutils
-
-# Compile all .c files into .o files
-$(OBJDIR)/%.o: $(SRCDIR)/%.c
-	$(CC) $(CFLAGS) -c $< -o $@
-
-# Run the program
-run: $(TARGET)
-	./$(TARGET)
-
-# Clean up
-clean:
-	rm -f $(OBJDIR)/*.o $(TARGET) $(LIB)
-
+	# Copy man page
+	sudo cp man/man3/mycat.1 /usr/local/share/man/man3/
