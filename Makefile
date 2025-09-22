@@ -1,42 +1,51 @@
-# Compiler and Flags
+# ===============================
+# Makefile for Dynamic Library Build
+# Feature 4 – Operating Systems Assignment
+# ===============================
+
+# Compiler and flags
 CC = gcc
 CFLAGS = -Wall -Iinclude
 
 # Directories
-SRCDIR = src
-OBJDIR = obj
-BINDIR = bin
-LIBDIR = lib
+SRC_DIR = src
+OBJ_DIR = obj
+LIB_DIR = lib
+BIN_DIR = bin
 
 # Targets
-TARGET = $(BINDIR)/client_static
-LIBNAME = libmyutils.a
-LIB = $(LIBDIR)/$(LIBNAME)
+TARGET_DYNAMIC = $(BIN_DIR)/client_dynamic
+DYN_LIB = $(LIB_DIR)/libmyutils.so
 
 # Object files
-OBJECTS = $(OBJDIR)/mystrfunctions.o $(OBJDIR)/myfilefunctions.o
-MAINOBJ = $(OBJDIR)/main.o
+OBJS = $(OBJ_DIR)/mystrfunctions.o $(OBJ_DIR)/myfilefunctions.o
 
-# Default build
-all: $(LIB) $(TARGET)
+# ===============================
+# Default target: build dynamic executable
+# ===============================
+all: $(TARGET_DYNAMIC)
 
-# Build static library from object files
-$(LIB): $(OBJECTS)
-	ar rcs $@ $^
+# Compile object files with position-independent code for dynamic library
+$(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
+	$(CC) $(CFLAGS) -fPIC -c $< -o $@
 
-# Build the final program and link with static library
-$(TARGET): $(MAINOBJ) $(LIB)
-	$(CC) $(CFLAGS) -o $@ $(MAINOBJ) -L$(LIBDIR) -lmyutils
+# Build the dynamic library (.so)
+$(DYN_LIB): $(OBJS)
+	$(CC) -shared -o $@ $^
 
-# Compile all .c files into .o files
-$(OBJDIR)/%.o: $(SRCDIR)/%.c
-	$(CC) $(CFLAGS) -c $< -o $@
+# Build dynamic client executable
+$(TARGET_DYNAMIC): $(SRC_DIR)/main.c $(DYN_LIB)
+	$(CC) $(CFLAGS) -o $@ $< -L$(LIB_DIR) -lmyutils
 
-# Run the program
-run: $(TARGET)
-	./$(TARGET)
-
-# Clean up
+# ===============================
+# Clean build artifacts
+# ===============================
+.PHONY: clean
 clean:
-	rm -f $(OBJDIR)/*.o $(TARGET) $(LIB)
+	rm -f $(OBJ_DIR)/*.o $(TARGET_DYNAMIC) $(DYN_LIB)
 
+# ===============================
+# Optional: Rebuild everything
+# ===============================
+.PHONY: rebuild
+rebuild: clean all
