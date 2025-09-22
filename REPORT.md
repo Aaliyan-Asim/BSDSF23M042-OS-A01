@@ -1,6 +1,5 @@
 # Report Questions
 
-```markdown
 ## Q1. Explain the linking rule in this part's Makefile:  
 **Rule:**
 $(TARGET): $(OBJECTS)
