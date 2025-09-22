@@ -1,3 +1,13 @@
+# Multi-file Project using Make Utility
+
+## Report for Feature-2
+
+### 1. Linking Rule in Makefile
+- **Rule:**  
+  ```make
+  $(TARGET): $(OBJECTS)
+        $(CC) $(CFLAGS) -o $@ $^
+
 2. Git Tags
 
 Definition:
