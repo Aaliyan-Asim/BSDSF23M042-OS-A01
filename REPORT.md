@@ -1,47 +1,30 @@
-# Multi-file Project using Make Utility
+# Report Questions
 
-## Report for Feature-2
+```markdown
+## Q1. Explain the linking rule in this part's Makefile:  
+**Rule:**
+$(TARGET): $(OBJECTS)
+	$(CC) $(CFLAGS) -o $@ $^
 
-### 1. Linking Rule in Makefile
-- **Rule:**  
-  ```make
-  $(TARGET): $(OBJECTS)
-        $(CC) $(CFLAGS) -o $@ $^
+**Answer:**  
+- $(TARGET) → the final executable (e.g., bin/client).  
+- $(OBJECTS) → object files generated from .c files.  
+- $@ → target being built.  
+- $^ → all prerequisites.  
+This links object files directly into one binary. With libraries, we would instead link against precompiled archives (.a or .so).
 
-2. Git Tags
+---
 
-Definition:
-A git tag is a pointer to a commit, often used to mark versions.
+## Q2. What is a git tag and why is it useful?  
+A git tag marks a specific commit for reference, usually for releases.  
+- Simple tag → lightweight pointer.  
+- Annotated tag → includes metadata and a message.  
+Tags are useful for versioning and identifying stable points.
 
-Why useful:
-Tags help identify stable versions and checkpoints in history.
+---
 
-Simple vs Annotated:
-
-Simple tag: Just a commit reference.
-
-Annotated tag: Stores metadata (tagger, date, message) and is preferred for releases.
-
-3. Purpose of GitHub Release
-
-Why create a release?
-Releases provide downloadable versions of the project for users.
-
-Why attach binaries?
-Users can run the program without compiling the source themselves.
-
-4. Testing Summary
-
-String Functions: Tested mystrlen, mystrcpy, mystrncpy, mystrcat.
-
-File Functions: Tested wordCount and mygrep using test.txt.
-
-5. Version Information
-
-Branch: multifile-build
-
-Tag: v0.1.1-multifile
-
-Release Title: Version 0.1.0: Multi-file Build
-
-Binary: bin/client
+## Q3. What is the purpose of creating a "Release" on GitHub?  
+A GitHub Release packages a tagged commit into a user-friendly version.  
+- Purpose: distribute stable versions.  
+- Attaching binaries: lets users run the program without compiling.  
+This makes it easier for end-users to use the software and track project history.
