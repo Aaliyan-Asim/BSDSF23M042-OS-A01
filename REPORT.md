@@ -51,3 +51,19 @@ Modern systems often combine these steps (`ar rcs`), but using `ranlib` is stand
 - Running `nm bin/client_static` shows that functions like `mystrlen` **do not appear as separate external symbols**.  
 - This demonstrates that static linking **embeds the function code directly** into the executable at link time.  
 - The final binary is self-contained and does not require the library at runtime for these functions.
+## Feature 4: Dynamic Library
+
+### Q1: Position-Independent Code (-fPIC)
+Position-Independent Code (PIC) is machine code that executes correctly regardless of its absolute memory address.  
+- It is **fundamental for creating shared libraries** because a shared library can be loaded at any memory location in a process.  
+- Compiling with `-fPIC` ensures the code can be relocated in memory without modification, allowing multiple programs to safely share a single copy of the library in RAM.
+
+### Q2: Difference in file size between static and dynamic clients
+- The **static client** (`client_static`) includes all the library code **embedded into the executable**, making it larger.  
+- The **dynamic client** (`client_dynamic`) only contains references to the shared library, so the executable is smaller.  
+- This difference exists because dynamic linking defers library code loading to runtime, while static linking copies all necessary code into the binary at compile time.
+
+### Q3: LD_LIBRARY_PATH
+- `LD_LIBRARY_PATH` is an **environment variable** that specifies directories for the dynamic loader to search for shared libraries at runtime.  
+- Setting it was necessary because the OS loader did not automatically know where to find our custom `libmyutils.so`.  
+- This demonstrates that the **dynamic loader’s responsibility** is to locate and load shared libraries into memory when a program starts, and it relies on search paths like `LD_LIBRARY_PATH` to find user-defined libraries.
